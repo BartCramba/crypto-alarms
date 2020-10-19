@@ -1,4 +1,4 @@
-package com.alarms.cryptoalarms.dto;
+package com.cryptos.cryptoalarms.dto;
 
 import lombok.Data;
 

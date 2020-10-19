@@ -1,4 +1,4 @@
-package com.alarms.cryptoalarms.domain;
+package com.cryptos.cryptoalarms.domain;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,16 +1,17 @@
-package com.alarms.cryptoalarms.domain;
+package com.cryptos.cryptoalarms.domain;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@ToString(exclude ="monitoredCrypto")
+@ToString(exclude = "monitoredCrypto")
 public class Alarm {
 
     @Id
@@ -27,7 +28,7 @@ public class Alarm {
      */
     private String rule;
 
-    private Double alarmPrice;
+    private BigDecimal alarmPrice;
 
     private LocalDateTime triggeredAt;
 

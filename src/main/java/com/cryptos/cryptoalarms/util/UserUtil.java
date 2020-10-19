@@ -1,4 +1,4 @@
-package com.alarms.cryptoalarms.util;
+package com.cryptos.cryptoalarms.util;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;

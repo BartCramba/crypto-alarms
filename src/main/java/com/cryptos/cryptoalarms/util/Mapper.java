@@ -1,9 +1,9 @@
-package com.alarms.cryptoalarms.util;
+package com.cryptos.cryptoalarms.util;
 
-import com.alarms.cryptoalarms.domain.Alarm;
-import com.alarms.cryptoalarms.domain.Crypto;
-import com.alarms.cryptoalarms.dto.AlarmDto;
-import com.alarms.cryptoalarms.dto.CryptoDto;
+import com.cryptos.cryptoalarms.domain.Alarm;
+import com.cryptos.cryptoalarms.domain.Crypto;
+import com.cryptos.cryptoalarms.dto.AlarmDto;
+import com.cryptos.cryptoalarms.dto.CryptoDto;
 import org.springframework.beans.BeanUtils;
 
 import java.util.function.Function;
@@ -21,6 +21,7 @@ public final class Mapper {
 
     public static final Function<Alarm, AlarmDto> toAlarmDto = (Alarm alarm) -> {
         AlarmDto alarmDto = new AlarmDto();
+        alarmDto.setId(alarm.getId());
         alarmDto.setActive(alarm.isActive());
         alarmDto.setAlarmPrice(alarm.getAlarmPrice());
         alarmDto.setReferencePrice(alarm.getRefferencePrice());

@@ -1,18 +1,25 @@
-package com.alarms.cryptoalarms.service;
+package com.cryptos.cryptoalarms.service;
 
-import com.alarms.cryptoalarms.domain.Alarm;
-import com.alarms.cryptoalarms.domain.Crypto;
-import com.alarms.cryptoalarms.domain.MonitoredCrypto;
-import com.alarms.cryptoalarms.domain.Person;
-import com.alarms.cryptoalarms.dto.AlarmForm;
+import com.cryptos.cryptoalarms.domain.Alarm;
+import com.cryptos.cryptoalarms.domain.Crypto;
+import com.cryptos.cryptoalarms.domain.MonitoredCrypto;
+import com.cryptos.cryptoalarms.domain.Person;
+import com.cryptos.cryptoalarms.dto.AlarmDto;
+import com.cryptos.cryptoalarms.dto.AlarmForm;
+import com.cryptos.cryptoalarms.repository.AlarmRepository;
+import com.cryptos.cryptoalarms.repository.CryptoRepository;
+import com.cryptos.cryptoalarms.repository.MonitoredCryptoRepository;
+import com.cryptos.cryptoalarms.repository.PersonRepository;
+import com.cryptos.cryptoalarms.util.Mapper;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.alarms.cryptoalarms.repository.AlarmRepository;
-import com.alarms.cryptoalarms.repository.CryptoRepository;
-import com.alarms.cryptoalarms.repository.MonitoredCryptoRepository;
-import com.alarms.cryptoalarms.repository.PersonRepository;
-import com.alarms.cryptoalarms.util.UserUtil;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,10 +32,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Override
     @Transactional
-    public void save(AlarmForm alarmForm) {
-
-        String username = UserUtil.getCurrentUsername();
-
+    public void save(AlarmForm alarmForm, String username) {
         MonitoredCrypto monitoredCrypto = monitoredCryptoRepository.findByPersonUsernameAndCryptoName(username, alarmForm.getCryptoName());
 
         if (monitoredCrypto == null) {
@@ -42,23 +46,43 @@ public class AlarmServiceImpl implements AlarmService {
             monitoredCryptoRepository.save(monitoredCrypto);
         }
 
-        Alarm alarm = new Alarm();
+        Alarm alarm;
+
+        if (alarmForm.getId() != null)
+            alarm = alarmRepository.getOne(alarmForm.getId());
+        else {
+            alarm = new Alarm();
+            alarm.setTriggeredAt(LocalDateTime.now());
+        }
         alarm.setMonitoredCrypto(monitoredCrypto);
         alarm.setRule(alarmForm.getRule());
-        alarm.setAlarmPrice(calculateTargetPrice(monitoredCrypto.getCrypto().getPrice(), alarmForm.getRule()));
+        alarm.setAlarmPrice(calculateTargetPrice(BigDecimal.valueOf(monitoredCrypto.getCrypto().getPrice()), alarmForm.getRule()));
+        alarm.setRefferencePrice(monitoredCrypto.getCrypto().getPrice());
+        alarm.setActive(true);
+
+        alarmRepository.save(alarm);
     }
 
-    private Double calculateTargetPrice(Double initialPrice, String rule) {
+    @Override
+    public List<AlarmDto> findAllForUser(String username, Sort sort) {
+        List<Alarm> alarms = alarmRepository.findAllByMonitoredCryptoPersonUsername(username, sort);
+
+        return alarms.stream()
+                .map(Mapper.toAlarmDto)
+                .collect(Collectors.toList());
+    }
+
+    private BigDecimal calculateTargetPrice(BigDecimal initialPrice, String rule) {
         boolean add = rule.startsWith("+");
         Double percent = Double.valueOf(rule.substring(1));
-        Double percentValueOfInitialPrice = (initialPrice * percent / 100);
+
+        BigDecimal percentValueOfInitialPrice = (initialPrice.multiply(BigDecimal.valueOf(percent))
+                .divide(BigDecimal.valueOf(100)));
+
         if (add) {
-            return initialPrice + percentValueOfInitialPrice;
+            return initialPrice.add(percentValueOfInitialPrice);
         } else {
-            return initialPrice - percentValueOfInitialPrice;
+            return initialPrice.subtract(percentValueOfInitialPrice);
         }
-
-
     }
-
 }

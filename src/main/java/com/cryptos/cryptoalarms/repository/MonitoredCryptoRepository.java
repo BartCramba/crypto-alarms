@@ -1,7 +1,8 @@
-package com.alarms.cryptoalarms.repository;
+package com.cryptos.cryptoalarms.repository;
 
-import com.alarms.cryptoalarms.domain.MonitoredCrypto;
+import com.cryptos.cryptoalarms.domain.MonitoredCrypto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository

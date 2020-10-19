@@ -1,4 +1,4 @@
-package com.alarms.cryptoalarms.domain;
+package com.cryptos.cryptoalarms.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString(exclude ="monitoredCryptos")
+@ToString(exclude = "monitoredCryptos")
 public class Person {
 
     @Id
@@ -24,8 +24,10 @@ public class Person {
 
     private String lastName;
 
-    @Transient
     private String password;
+
+    @ManyToMany
+    private Set<Role> roles;
 
     @OneToMany(mappedBy = "person")
     private Set<MonitoredCrypto> monitoredCryptos;

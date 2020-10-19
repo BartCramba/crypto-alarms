@@ -1,4 +1,4 @@
-package com.alarms.cryptoalarms.domain;
+package com.cryptos.cryptoalarms.domain;
 
 import lombok.Data;
 
@@ -20,6 +20,6 @@ public class Crypto {
 
     private Double changePercent;
 
-    @OneToMany(mappedBy = "stock")
+    @OneToMany(mappedBy = "crypto")
     private Set<MonitoredCrypto> monitoredCryptos;
 }

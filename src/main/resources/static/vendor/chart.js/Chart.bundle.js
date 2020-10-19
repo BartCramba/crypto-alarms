@@ -2807,7 +2807,7 @@ var exports$2 = core_element.extend({
 	currentStep: 0, // the current animation step
 	numSteps: 60, // default number of steps
 	easing: '', // the easing to use for this animation
-	render: null, // render function used by the animation service
+	render: null, // render function used by the animation com.alarms.cryptoalarms.service
 
 	onAnimationProgress: null, // user specified callback to fire on each step of the animation
 	onAnimationComplete: null, // user specified callback to fire when the animation finishes
@@ -5808,9 +5808,9 @@ core_defaults._set('scatter', {
 // Scatter charts use line controllers
 var controller_scatter = controller_line;
 
-// NOTE export a map in which the key represents the controller type, not
+// NOTE export a map in which the key represents the com.alarms.cryptoalarms.controller type, not
 // the class, and so must be CamelCase in order to be correctly retrieved
-// by the controller in core.controller.js (`controllers[meta.type]`).
+// by the com.alarms.cryptoalarms.controller in core.com.alarms.cryptoalarms.controller.js (`controllers[meta.type]`).
 
 var controllers = {
 	bar: controller_bar,
@@ -6210,9 +6210,9 @@ core_defaults._set('global', {
  * @prop {number} bottom - Bottom edge of the item. Set by layout system and cannot be used in update
  */
 
-// The layout service is very self explanatory.  It's responsible for the layout within a chart.
-// Scales, Legends and Plugins all rely on the layout service and can easily register to be placed anywhere they need
-// It is this service's responsibility of carrying out that layout.
+// The layout com.alarms.cryptoalarms.service is very self explanatory.  It's responsible for the layout within a chart.
+// Scales, Legends and Plugins all rely on the layout com.alarms.cryptoalarms.service and can easily register to be placed anywhere they need
+// It is this com.alarms.cryptoalarms.service's responsibility of carrying out that layout.
 var core_layouts = {
 	defaults: {},
 
@@ -6606,7 +6606,7 @@ function readUsedSize(element, property) {
 
 /**
  * Initializes the canvas style and render size without modifying the canvas display size,
- * since responsiveness is handled by the controller.resize() method. The config is used
+ * since responsiveness is handled by the com.alarms.cryptoalarms.controller.resize() method. The config is used
  * to determine the aspect ratio to apply in case no explicit height has been specified.
  */
 function initCanvas(canvas, config) {
@@ -7080,7 +7080,7 @@ core_defaults._set('global', {
 });
 
 /**
- * The plugin service singleton
+ * The plugin com.alarms.cryptoalarms.service singleton
  * @namespace Chart.plugins
  * @since 2.1.0
  */
@@ -8444,7 +8444,7 @@ helpers$1.extend(Chart.prototype, /** @lends Chart */ {
 		 * @private
 		 */
 		me.chart = me;
-		me.controller = me; // chart.chart.controller #inception
+		me.controller = me; // chart.chart.com.alarms.cryptoalarms.controller #inception
 
 		// Add the chart instance to the global namespace
 		Chart.instances[me.id] = me;
@@ -8461,7 +8461,7 @@ helpers$1.extend(Chart.prototype, /** @lends Chart */ {
 
 		if (!context || !canvas) {
 			// The given item is not a compatible context2d element, let's return before finalizing
-			// the chart initialization but after setting basic chart / controller properties that
+			// the chart initialization but after setting basic chart / com.alarms.cryptoalarms.controller properties that
 			// can help to figure out that the chart is not valid (e.g chart.canvas !== null);
 			// https://github.com/chartjs/Chart.js/issues/2807
 			console.error("Failed to create chart: can't acquire context from the given item");
@@ -18315,7 +18315,7 @@ core_defaults._set('global', {
 			var ci = this.chart;
 			var meta = ci.getDatasetMeta(index);
 
-			// See controller.isDatasetVisible comment
+			// See com.alarms.cryptoalarms.controller.isDatasetVisible comment
 			meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
 
 			// We hid a dataset ... rerender the chart

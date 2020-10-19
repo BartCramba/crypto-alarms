@@ -1,6 +1,8 @@
-package com.alarms.cryptoalarms.dto;
+package com.cryptos.cryptoalarms.dto;
 
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 @Data
 public class AlarmDto {
@@ -13,10 +15,10 @@ public class AlarmDto {
 
     private boolean active;
 
-    private Double alarmPrice;
+    private BigDecimal alarmPrice;
 
     /**
-     * Variance as percentage from the price when the alarm was defined (referencePrice) and the current price of the monitored stock.
+     * Variance as percentage from the price when the alarm was defined (referencePrice) and the current price of the monitored crypto.
      */
     private Double variance;
 
