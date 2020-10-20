@@ -1,16 +1,12 @@
 <#import "/spring.ftl" as spring />
 <#import  "layout.ftl" as layout >
+<#import "util-macros.ftl" as util>
 
 <@layout.myLayout>
 
-    <#if alarmSaved??>
-        <div class="alert alert-success" role="alert">
-            Alarm saved successfully !
-            <button class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    </#if>
+    <@util.alarmSaving></@util.alarmSaving>
+
+    <h3> Active alarms </h3>
 
     <table class="table table-striped">
         <thead class="thead-dark">
