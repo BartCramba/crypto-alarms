@@ -52,6 +52,10 @@ public class AlarmController {
         return "alarms";
     }
 
+    public void deleteAlarm(@PathVariable(name ="id") Long id) {
+        alarmService.delete(id, UserUtil.getCurrentUsername());
+    }
+
     @PostMapping
     public String saveAlarm(@ModelAttribute @Valid AlarmForm alarmForm, @RequestHeader("Referer") String referer, RedirectAttributes redirectAttributes) throws URISyntaxException {
         try {
@@ -59,8 +63,8 @@ public class AlarmController {
             redirectAttributes.addFlashAttribute("alarmSaved", true);
         } catch (Exception e) {
             LOGGER.error("Not found exception raised.", e);
-//            redirectAttributes.addFlashAttribute("alarmError", true);
-//            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("alarmError", true);
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         URI refererUri = new URI(referer);

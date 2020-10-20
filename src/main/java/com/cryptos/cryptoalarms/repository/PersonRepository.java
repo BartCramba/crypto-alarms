@@ -15,5 +15,4 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
     @Query(value = "select p from Person p join p.monitoredCryptos m where m.id in (?1)")
     Set<Person> findAllByMonitoredCryptos(Collection<Long> monitoredCryptoIds);
-
 }

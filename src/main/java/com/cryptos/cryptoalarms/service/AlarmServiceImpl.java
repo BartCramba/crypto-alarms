@@ -4,6 +4,7 @@ import com.cryptos.cryptoalarms.domain.Alarm;
 import com.cryptos.cryptoalarms.domain.Crypto;
 import com.cryptos.cryptoalarms.domain.MonitoredCrypto;
 import com.cryptos.cryptoalarms.domain.Person;
+import com.cryptos.cryptoalarms.domain.event.CryptoUpdatedEvent;
 import com.cryptos.cryptoalarms.dto.AlarmDto;
 import com.cryptos.cryptoalarms.dto.AlarmForm;
 import com.cryptos.cryptoalarms.repository.AlarmRepository;
@@ -12,13 +13,16 @@ import com.cryptos.cryptoalarms.repository.MonitoredCryptoRepository;
 import com.cryptos.cryptoalarms.repository.PersonRepository;
 import com.cryptos.cryptoalarms.util.Mapper;
 import lombok.AllArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,6 +74,40 @@ public class AlarmServiceImpl implements AlarmService {
         return alarms.stream()
                 .map(Mapper.toAlarmDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id, String username) {
+
+        List<Alarm> alarms = alarmRepository.findAlarmForPerson(username, id);
+
+        if (CollectionUtils.isEmpty(alarms)) {
+            throw new RuntimeException("Not authorized to delete this alarm!");
+        }
+
+        alarmRepository.deleteById(id);
+    }
+
+    @EventListener
+    @Transactional
+    public void handleCryptoUpdate(CryptoUpdatedEvent cryptoUpdatedEvent) {
+        String cryptoName = cryptoUpdatedEvent.getCryptoName();
+        BigDecimal cryptoPrice = cryptoUpdatedEvent.getPrice();
+
+        List<Alarm> alarms = alarmRepository.findAllByMonitoredCryptoCryptoName(cryptoName);
+
+        List<Alarm> alarmsToTrigger = alarms.stream()
+                .filter(alarm -> alarm.getAlarmPrice().compareTo(cryptoPrice) <= 0)
+                .collect(Collectors.toList());
+
+        Set<Long> monitoredCryptoIds = alarmsToTrigger.stream()
+                .map(alarm -> alarm.getMonitoredCrypto().getId())
+                .collect(Collectors.toSet());
+
+        Set<Person> personsToNotify = personRepository.findAllByMonitoredCryptos(monitoredCryptoIds);
+
+        // TODO -> identify for which stocks to notify each person -> one mail per person with multiple stock data, if its the case.
     }
 
     private BigDecimal calculateTargetPrice(BigDecimal initialPrice, String rule) {

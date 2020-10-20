@@ -27,6 +27,10 @@
         </head>
 
         <script src="/vendor/jquery/jquery.min.js"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <#--    https://www.jqueryscript.net/form/AJAX-enabled-Typeahead-Autocomplete-Plugin-For-jQuery-Bootstrap.html-->
+        <script src="/js/bootstrap-typeahead.js"></script>
 
 
         <body id="page-top">
@@ -162,9 +166,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Bootstrap core JavaScript-->
-            <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
             <!-- Core plugin JavaScript-->
             <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>

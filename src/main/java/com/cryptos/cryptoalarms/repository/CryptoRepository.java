@@ -12,7 +12,7 @@ public interface CryptoRepository extends JpaRepository<Crypto, Long> {
 //    @Cacheable(cacheNames = "all-cryptos")
     List<Crypto> findAll();
 
-//    List<Crypto> findAllByMonitoredCryptosPersonUsername(String username);
+    List<Crypto> findAllByMonitoredCryptosPersonUsername(String username);
 
 //    @CacheEvict(cacheNames = "all-cryptos")
     Crypto save(Crypto crypto);
